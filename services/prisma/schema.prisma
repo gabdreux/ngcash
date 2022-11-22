@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:Soconacostela2022@localhost:5432/database"
+}
+
+
+
+model User {
+
+	id Int @id @default(autoincrement())
+  
+  userName String @unique
+  password String
+  status Boolean
+
+  accountId Account?
+
+}
+
+
+
+model Account {
+
+  id Int @id @default(autoincrement())
+
+  balance Decimal
+
+  saidas Transaction[] @relation("saidas")
+
+  entradas     Transaction[] @relation("entradas")
+
+
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id])
+
+}
+
+
+model Transaction {
+
+  id Int @id @default(autoincrement())
+
+  value         Float
+  createdAt     DateTime @default(now())
+
+
+  sourceId      Int
+  source        Account   @relation("saidas", fields: [sourceId], references: [id])
+
+
+  destinationId Int
+  destination   Account   @relation("entradas", fields: [destinationId], references: [id])
+ 
+}
