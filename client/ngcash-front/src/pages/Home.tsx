@@ -3,16 +3,24 @@ import { Container } from "@mui/system";
 
 import Cabeça from "../components/cabeça";
 import CorpoHome from "../components/corpoHome";
+import { Grid } from "@mui/material";
 
 
 export const Home: React.FC = () => {
     return (
 
         <div>
+
             <Cabeça />
-            <Container maxWidth="xl">
-             <CorpoHome/>
+
+            <Container maxWidth="lg">
+             <Grid container>
+                <Grid item xs={12}>
+                    <CorpoHome />
+                </Grid>
+             </Grid>   
             </Container>
+
         </div>
   
     )

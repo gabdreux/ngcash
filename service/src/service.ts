@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 const toDoRoutes = require("./routes/routes");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 
 
@@ -24,4 +24,4 @@ app.get('/', (req: Request, res: Response) => { res.send('<h1>Hello World From S
 
 
 
-app.listen('3000', (): void => { console.log(`Server is running on port: ${port}`) });
+app.listen('5000', (): void => { console.log(`Server is running on port: ${port}`) });
