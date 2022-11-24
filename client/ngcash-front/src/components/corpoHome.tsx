@@ -9,11 +9,15 @@ import { Container, Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import CorpoTransactions from './corpoTransactions'
 import CorpoExtrato from './corpoExtrato';
+import CorpoMain from './corpoMain';
+import CorpoLogin from './corpoLogin';
+
+
 
 
 export default function CorpoHome () {
   return (
-    <Card sx={{ backgroundColor: "black", padding: "2em"}}>
+    <Card sx={{ backgroundColor: "black", padding: "2em", marginBottom: "2em", borderRadius: "10px"}}>
 
 
 
@@ -29,34 +33,11 @@ export default function CorpoHome () {
         </Grid>
       </Container>
 
-
-
-      <CardContent>
-
-          <Box display="flex" justifyContent="center" width="100%">
-            <Typography gutterBottom variant="h5" component="div" color="white">
-              Olá, User!
-            </Typography>
-          </Box>
-
-          <Box display="flex" justifyContent="center" width="100%">
-            <Typography variant="body2" color="white">
-                Seu balcanço atual é de:
-            </Typography>
-          </Box>
-
-      </CardContent>
-
-
-
-      <CardActions>
-        <Button size="small">Extrato</Button>
-        <Button size="small">Operações</Button>
-      </CardActions>
-
+      <CorpoLogin/>
+      <CorpoMain/>
       <CorpoTransactions/>
       <CorpoExtrato/>
-      <></>
+
 
 
     </Card>

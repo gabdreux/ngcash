@@ -1,5 +1,10 @@
 import * as React from 'react';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { CardActions, CardContent } from '@mui/material';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card'
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -36,14 +41,33 @@ const rows = [
 
 export default function DataTable() {
   return (
-    <div style={{ height: 400, width: '100%', backgroundColor: "white" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-      />
+    
+    
+    <div style={{ padding: "1em" }}>
+
+
+          <Box display="flex" justifyContent="center" width="100%" marginBottom="1em">
+            <Typography gutterBottom variant="h5" component="div" color="white">
+              EXTRATO
+            </Typography>
+          </Box>
+
+
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          checkboxSelection
+          style={{ height: 400, width: '100%', backgroundColor: "white", borderRadius: "10px" }}
+        />
+
+        <CardActions>
+          <Button size="small">Fechar</Button>
+        </CardActions>
+
     </div>
+
+
   );
 }
