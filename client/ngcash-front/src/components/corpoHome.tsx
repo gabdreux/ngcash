@@ -7,6 +7,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Container, Grid } from '@mui/material';
 import Box from '@mui/material/Box';
+import CorpoTransactions from './corpoTransactions'
+import CorpoExtrato from './corpoExtrato';
 
 
 export default function CorpoHome () {
@@ -51,6 +53,10 @@ export default function CorpoHome () {
         <Button size="small">Extrato</Button>
         <Button size="small">Operações</Button>
       </CardActions>
+
+      <CorpoTransactions/>
+      <CorpoExtrato/>
+      <></>
 
 
     </Card>
