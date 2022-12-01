@@ -4,21 +4,6 @@ const { PrismaClient } = require("@prisma/client")
 
 const prisma = new PrismaClient();
 
-// const user01 = [{ id: "1", userName: "Nome Teste", password: "minhaSenha", status: false, accountId: "1" }];
-
-
-
-// interface user { 
-
-//     id: number;
-//     userName: string;
-//     password: string;
-//     status: Boolean;
-//     accountId: number;
-
-// };
-
-
 
 
 // Create
@@ -28,12 +13,25 @@ toDoRoutes.post("/user", async (req: any, res: any) => {
     const { userName, password } = req.body;
 
 
+    const userAlreadyExist = await prisma.user.findUnique({
+        where: {
+            userName,
+        }
+    });
+
+    if(userAlreadyExist){
+        return res.status(404).json("Esse userName já está sendo usado!")
+    }
+
+
     const user = await prisma.user.create({
+            
         data: {
             
             userName,
             password,
             status: false,
+
 
         },
     });
@@ -44,6 +42,33 @@ toDoRoutes.post("/user", async (req: any, res: any) => {
 });
 
 
+
+
+toDoRoutes.post("/account", async (req: Request, res: Response) => {
+
+
+    const {  userId } = req.body;
+
+    const account = await prisma.account.create({
+        data: {
+
+            balance: 100,
+            userId,
+        
+        },
+    });
+
+    return res.status(201).json(account);
+    
+});
+
+
+
+
+
+
+
+
 // Read
 
 toDoRoutes.get("/user", async (req: any, res: any) => {
@@ -52,6 +77,20 @@ toDoRoutes.get("/user", async (req: any, res: any) => {
     return res.status(200).json(users);
 
 });
+
+
+
+
+
+
+
+////////////////////////
+
+
+
+
+
+
 
 
 // Update
@@ -71,7 +110,7 @@ toDoRoutes.put("/user", async (req, res) => {
     });
 
     if(!userAlreadyExist){
-        return res.status(404).json("Esse usuário não existe!")
+        return res.status(404).json("Esse usuário já existe!")
     }
 
     const user = await prisma.user.update ({

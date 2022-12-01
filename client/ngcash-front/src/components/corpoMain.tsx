@@ -9,38 +9,83 @@ import { Container, Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import CorpoTransactions from './corpoTransactions'
 import CorpoExtrato from './corpoExtrato';
+import { text } from 'stream/consumers';
+import { useState } from 'react';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { PropsWithChildren } from "react";
 
 
 
 
-export default function CorpoMain () {
+///////////////////////////////////////////////
+
+export type UsersTypes = {
+  id: number;
+  name: string;
+  status: boolean;
+};
+
+export type ListProps = {
+
+  user : UsersTypes;
+
+};
+
+
+export default function CorpoMain (props: PropsWithChildren) {
+
+
+
   return (
+
     <Card sx={{ backgroundColor: "black", padding: "1em", borderRadius: "10px"}}>
 
-      <CardContent>
-
-          <Box display="flex" justifyContent="center" width="100%">
-            <Typography gutterBottom variant="h5" component="div" color="white">
-              Olá, User!
-            </Typography>
-          </Box>
-
-          <Box display="flex" justifyContent="center" width="100%">
-            <Typography variant="body2" color="white">
-                Seu balcanço atual é de:
-            </Typography>
-          </Box>
-
-      </CardContent>
 
 
 
-      <CardActions>
-        <Button size="small">Extrato</Button>
-        <Button size="small">Operações</Button>
-      </CardActions>
 
 
-    </Card>
-  );
-}
+    <CardContent>
+
+
+        <Box display="flex" justifyContent="center" width="100%">
+
+          <Typography gutterBottom variant="h5" component="div" color="white">
+            {props.children}
+          </Typography>
+
+        </Box>
+
+
+
+        <Box display="flex" justifyContent="center" width="100%">
+          <Typography variant="body2" color="white">
+              Seu balcanço atual é de:
+          </Typography>
+        </Box>
+
+
+    </CardContent>
+
+
+
+
+
+    <CardActions>
+      <Button size="small">Extrato</Button>
+      <Button size="small">Operações</Button>
+    </CardActions>
+
+
+  </Card>
+
+
+
+  )
+
+};
+
+
+
+

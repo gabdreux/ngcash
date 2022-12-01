@@ -9,13 +9,26 @@ import { Container, Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import CorpoTransactions from './corpoTransactions'
 import CorpoExtrato from './corpoExtrato';
-import CorpoMain from './corpoMain';
+import CorpoMain  from './corpoMain';
 import CorpoLogin from './corpoLogin';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+
 
 
 
 
 export default function CorpoHome () {
+  
+  const [tests, setTests] = useState([]);
+
+
+  useEffect(() => {
+      axios.get("http://localhost:5000/user").then((res) => setTests(res.data)).catch((err) => console.log(err));
+  });
+  
+  
   return (
     <Card sx={{ backgroundColor: "black", padding: "2em", marginBottom: "2em", borderRadius: "10px"}}>
 
@@ -33,13 +46,26 @@ export default function CorpoHome () {
         </Grid>
       </Container>
 
+
+
+
       <CorpoLogin/>
-      <CorpoMain/>
+
+
+      <div>
+        {tests.map((test) => (
+          <CorpoMain>{test['userName']}</CorpoMain>
+        ))}
+      </div>
+
+
       <CorpoTransactions/>
       <CorpoExtrato/>
 
 
 
+
+
     </Card>
   );
-}
+};

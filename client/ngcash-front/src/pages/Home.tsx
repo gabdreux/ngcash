@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "@mui/material";
 import Cabeça from "../components/cabeça";
-import CorpoHome from "../components/corpoHome";
+import CorpoHome  from "../components/corpoHome";
 import { Grid } from "@mui/material";
 
 

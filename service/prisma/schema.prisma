@@ -17,10 +17,10 @@ model User {
 	id Int @id @default(autoincrement())
   
   userName String @unique
-  password String
+  password String 
   status Boolean
 
-  accountId Account?
+  accountId Account[]
 
 }
 
