@@ -5,12 +5,24 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useState, useContext } from 'react';
+
+// import ActionProvider, { useAction } from '../helper/context';
+
 
 
 export default function Cabeça () {
+
+    // const { action, setAction } = useAction();
+
+    
+
   return (
 
-    <Box sx={{ flexGrow: 1, marginBottom: "2em" }}>
+
+    // <ActionProvider> {
+      
+      <Box sx={{ flexGrow: 1, marginBottom: "2em" }}>
       <AppBar position="static"  sx={{backgroundColor: 'black'}}>
         <Toolbar>
 
@@ -18,15 +30,19 @@ export default function Cabeça () {
 
             <Box component="img" src="https://ng.cash/_nuxt/img/logo-ngcash-branco.88c5860.svg" height="2em"/>
             <Box>
-              <Button color="inherit">Login</Button>
-              <Button color="inherit">SignUp</Button>
+              
+
+              {/* <Button  onClick={ () => setAction(action === 'login' ? 'register' : 'login')}>{ action === 'login' ? 'SIGN IN' : 'SIGN UPP'}</Button> */}
               <LogoutIcon/>
             </Box>
           </Box>
         </Toolbar>
       </AppBar>
     </Box>
+      
+    //   }
 
+    // </ActionProvider>
   );
 }
 

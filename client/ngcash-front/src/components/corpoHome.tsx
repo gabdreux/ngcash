@@ -30,6 +30,7 @@ export default function CorpoHome () {
   
   
   return (
+    
     <Card sx={{ backgroundColor: "black", padding: "2em", marginBottom: "2em", borderRadius: "10px"}}>
 
 

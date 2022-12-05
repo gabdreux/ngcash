@@ -14,21 +14,20 @@ import Stack from '@mui/material/Stack';
 import { ButtonAction } from './buttonAction';
 
 import { InputField } from './inputField';
-import { useState, useEffect } from 'react';
-
-
+import { useState, useEffect, useContext } from 'react';
 
 
 
 
 export default function CorpoLogin () {
 
+  const [action, setAction] = useState('login');
 
 
   const [formData, setFormData] = useState ({
 
     userName: '',
-    password: ''
+    password: '',
 
   })
 
@@ -45,6 +44,8 @@ export default function CorpoLogin () {
 
 
   return (
+
+
     <Card sx={{ backgroundColor: "black", padding: "1em", borderRadius: "10px"}}>
 
 
@@ -57,18 +58,25 @@ export default function CorpoLogin () {
           </Typography>
         </Box>
 
-        <Box display="flex" justifyContent="center" width="100%" paddingBottom="1em">
+
+        <Box display="flex" justifyContent="center" width="100%" paddingBottom="2em">
           <Typography variant="body2" color="white">
-             Faça Login ou Registre-se para continuar!
+             { action === 'login' ? 'FAÇA O LOGIN PARA CONTINUAR' : 'REGISTRE-SE PARA COMEÇAR'}
           </Typography>
         </Box>
 
+
         
-        <Card sx={{ backgroundColor: "white", padding: "1em", borderRadius: "10px"}}>
+
+        
+        {/* <Card sx={{ backgroundColor: "white", padding: "1em", borderRadius: "10px"}}>
           {
             JSON.stringify(formData)
           }
         </Card>
+  */}
+
+
 
 
         <form>
@@ -92,18 +100,52 @@ export default function CorpoLogin () {
           
           />
 
+{/* 
+          {
 
+            action !== 'login' ? <>
+             
+              <InputField
+          
+              htmlFor='name'
+              label='Primeiro nome:'
+              value={formData.name}
+              onChange={e => handleInputChange(e, 'name')}
+              
+              />
+
+            </>: null
+
+          }; */}
+          
+          <Box display="flex" justifyContent="center" width="100%" marginTop="1em">
+            <button type='submit'  name='_action' value={action}>
+            { action === 'login' ? 'LOGIN' : 'SIGN UP'}
+            </button>
+          </Box>
 
         </form>
 
 
-        <ButtonAction titulo='Login'/>
+        
+
+
+        <Box display="flex" justifyContent="center" width="100%" marginTop="1em">
+
+          <Button onClick={ () => setAction(action === 'login' ? 'login' : 'login')}>SIGN IN</Button>
+          <Typography variant="h6" color="white">
+            |
+          </Typography>
+          <Button onClick={ () => setAction(action === 'login' ? 'register' : 'register')}>SIGN UP</Button>
+
+        </Box>
 
 
       </CardContent>
 
-
-
     </Card>
+
+
+
   );
 }

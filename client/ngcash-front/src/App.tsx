@@ -16,7 +16,6 @@ import axios from 'axios';
 
 
 
-
 const App: React.FC = () => {
   return (
     <Home />
