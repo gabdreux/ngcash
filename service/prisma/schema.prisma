@@ -20,7 +20,8 @@ model User {
   password String 
   status Boolean
 
-  accountId Account[]
+  accountId Int @unique
+  account Account @relation(fields: [accountId], references: [id])
 
 }
 
@@ -37,8 +38,7 @@ model Account {
   entradas     Transaction[] @relation("entradas")
 
 
-  userId Int @unique
-  user User @relation(fields: [userId], references: [id])
+  user User[]
 
 }
 

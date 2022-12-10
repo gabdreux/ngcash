@@ -33,7 +33,7 @@ export default function Cabeça () {
               
 
               {/* <Button  onClick={ () => setAction(action === 'login' ? 'register' : 'login')}>{ action === 'login' ? 'SIGN IN' : 'SIGN UPP'}</Button> */}
-              <LogoutIcon/>
+              {/* <LogoutIcon/> */}
             </Box>
           </Box>
         </Toolbar>

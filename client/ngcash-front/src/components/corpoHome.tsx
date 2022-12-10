@@ -21,12 +21,12 @@ import axios from 'axios';
 
 export default function CorpoHome () {
   
-  const [tests, setTests] = useState([]);
+  // const [tests, setTests] = useState([]);
 
 
-  useEffect(() => {
-      axios.get("http://localhost:5000/user").then((res) => setTests(res.data)).catch((err) => console.log(err));
-  });
+  // useEffect(() => {
+  //     axios.get("http://localhost:5000/user").then((res) => setTests(res.data)).catch((err) => console.log(err));
+  // });
   
   
   return (
@@ -53,7 +53,7 @@ export default function CorpoHome () {
       <CorpoLogin/>
 
 
-      <div>
+      {/* <div>
         {tests.map((test) => (
           <CorpoMain>{test['userName']}</CorpoMain>
         ))}
@@ -61,7 +61,7 @@ export default function CorpoHome () {
 
 
       <CorpoTransactions/>
-      <CorpoExtrato/>
+      <CorpoExtrato/> */}
 
 
 

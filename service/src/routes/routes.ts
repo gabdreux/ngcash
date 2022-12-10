@@ -1,23 +1,35 @@
+//Express => Para habilitar o CRUD.
 import express, { Request, Response } from 'express';
+
+
+import { createUser } from '../utils/users.server';
+
+
+//Usado para criar rotas
 const toDoRoutes = express.Router();
+
+//Prisma => usado para criar esquemas para o DB.
 const { PrismaClient } = require("@prisma/client")
 
 const prisma = new PrismaClient();
 
-
+require("dotenv-safe").config();
+const jwt = require('jsonwebtoken');
 
 // Create
 
 toDoRoutes.post("/user", async (req: any, res: any) => {
 
     const { userName, password } = req.body;
-
+    const token = jwt.sign({ password }, process.env.SECRET);
+    console.log(token);
 
     const userAlreadyExist = await prisma.user.findUnique({
         where: {
             userName,
         }
     });
+
 
     if(userAlreadyExist){
         return res.status(404).json("Esse userName já está sendo usado!")
@@ -29,11 +41,19 @@ toDoRoutes.post("/user", async (req: any, res: any) => {
         data: {
             
             userName,
-            password,
+            password:token,
             status: false,
 
 
         },
+
+
+
+    // const user = new createUser();    
+
+
+
+
     });
 
     return res.status(201).json(user);
@@ -75,6 +95,34 @@ toDoRoutes.get("/user", async (req: any, res: any) => {
 
     const users = await prisma.user.findMany()
     return res.status(200).json(users);
+
+});
+
+
+
+//Rota para pegar usuário por nome
+toDoRoutes.get("/user/:userName", async (req: Request, res: Response) => {
+
+    const userName = req.params.userName;
+
+    console.log(userName);
+
+    const user = await prisma.user.findUnique({
+        
+        where: {
+            userName: userName
+        },
+       select: { 
+         userName: true,
+         password: true
+      }
+
+      });
+
+
+    console.log('Usuário encontrado!', user);
+    return res.status(200).json(user);
+    
 
 });
 

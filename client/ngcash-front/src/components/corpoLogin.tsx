@@ -1,25 +1,43 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
+
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Container, Grid } from '@mui/material';
+
 import Box from '@mui/material/Box';
-import CorpoTransactions from './corpoTransactions'
-import CorpoExtrato from './corpoExtrato';
-import InputBase from '@mui/material/InputBase';
-import Stack from '@mui/material/Stack';
-import { ButtonAction } from './buttonAction';
+
+
+
 
 import { InputField } from './inputField';
-import { useState, useEffect, useContext } from 'react';
+import { useState} from 'react';
+
+import axios from 'axios';
+
+
 
 
 
 
 export default function CorpoLogin () {
+
+
+  const [tests, setTests] = useState('');
+  
+  const handleSubmit = async (userName: string,  password: string) => {
+    console.log(userName, password);
+   
+   const result =  await axios.get(`http://localhost:5000/user/:${userName}`)
+   const { data } = result;
+    console.log(data);
+
+  //  .then((res) => console.log({ res }))
+
+  //  .catch((err) => console.log('Usuário não encontrado'));
+    // console.log(tests);
+  }
 
   const [action, setAction] = useState('login');
 
@@ -119,7 +137,13 @@ export default function CorpoLogin () {
           }; */}
           
           <Box display="flex" justifyContent="center" width="100%" marginTop="1em">
-            <button type='submit'  name='_action' value={action}>
+            <button 
+              type='button'  
+              name='_action' 
+              value={action}
+              onClick={() => {
+                handleSubmit(formData.userName, formData.password);
+              }}>
             { action === 'login' ? 'LOGIN' : 'SIGN UP'}
             </button>
           </Box>

@@ -4,15 +4,23 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require ("cors");
 
-
+const options = {
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    origin:'*', 
+    credentials: true,
+    optionSuccessStatus: 200,
+};
 
 app.use(express.json());
-app.use(cors());
+app.use(cors(options));
 app.use(toDoRoutes);
 
 
 
 app.get('/', (req: Request, res: Response) => { res.send('<h1>Hello World From Service! :)</h1>') });
+
+
+
 
 
 
