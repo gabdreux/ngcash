@@ -66,14 +66,13 @@ toDoRoutes.post("/user", async (req: any, res: any) => {
 
 toDoRoutes.post("/account", async (req: Request, res: Response) => {
 
-
-    const {  userId } = req.body;
+    const {  authorId } = req.body;
 
     const account = await prisma.account.create({
         data: {
 
-            balance: 100,
-            userId,
+            // balance: 100,
+            authorId,
         
         },
     });

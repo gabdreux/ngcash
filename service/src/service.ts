@@ -5,7 +5,7 @@ const port = process.env.PORT || 5000;
 const cors = require ("cors");
 
 const options = {
-    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'],
     origin:'*', 
     credentials: true,
     optionSuccessStatus: 200,

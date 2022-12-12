@@ -1,22 +1,8 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-
-import CardContent from '@mui/material/CardContent';
-
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
-import Box from '@mui/material/Box';
-
-
-
-
+import {Card, CardContent, Button, Typography, Box } from '@mui/material/';
 import { InputField } from './inputField';
-import { useState} from 'react';
-
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-
-
 
 
 
@@ -29,15 +15,12 @@ export default function CorpoLogin () {
   const handleSubmit = async (userName: string,  password: string) => {
     console.log(userName, password);
    
-   const result =  await axios.get(`http://localhost:5000/user/:${userName}`)
-   const { data } = result;
-    console.log(data);
+    // await axios.get(`http://localhost:5000/user/${userName}`).then((res) => setTests(res.data)).catch((err) => console.log(err));
 
-  //  .then((res) => console.log({ res }))
+    //colocar rota do nextjs aqui 
+    console.log(tests);
 
-  //  .catch((err) => console.log('Usuário não encontrado'));
-    // console.log(tests);
-  }
+  };
 
   const [action, setAction] = useState('login');
 
@@ -120,7 +103,6 @@ export default function CorpoLogin () {
 
 {/* 
           {
-
             action !== 'login' ? <>
              
               <InputField
@@ -131,9 +113,7 @@ export default function CorpoLogin () {
               onChange={e => handleInputChange(e, 'name')}
               
               />
-
             </>: null
-
           }; */}
           
           <Box display="flex" justifyContent="center" width="100%" marginTop="1em">
@@ -173,3 +153,4 @@ export default function CorpoLogin () {
 
   );
 }
+
