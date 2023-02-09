@@ -5,6 +5,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
+
 datasource db {
   provider = "postgresql"
   url      = "postgresql://postgres:Soconacostela2022@localhost:5432/database"

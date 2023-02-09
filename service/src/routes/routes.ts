@@ -2,7 +2,6 @@
 import express, { Request, Response } from 'express';
 
 
-import { createUser } from '../utils/users.server';
 
 
 //Usado para criar rotas
@@ -16,75 +15,39 @@ const prisma = new PrismaClient();
 require("dotenv-safe").config();
 const jwt = require('jsonwebtoken');
 
+
+
 // Create
-
-toDoRoutes.post("/user", async (req: any, res: any) => {
-
+toDoRoutes.post("/register", async (req: Request, res: Response) => {
     const { userName, password } = req.body;
     const token = jwt.sign({ password }, process.env.SECRET);
-    console.log(token);
-
-    const userAlreadyExist = await prisma.user.findUnique({
-        where: {
-            userName,
-        }
+  
+    const userAlreadyExists = await prisma.user.findUnique({
+      where: {
+        userName,
+      }
     });
-
-
-    if(userAlreadyExist){
-        return res.status(404).json("Esse userName já está sendo usado!")
+  
+    if (userAlreadyExists) {
+      return res.status(404).json("User name already taken");
     }
-
-
-    const user = await prisma.user.create({
-            
-        data: {
-            
+  
+  const account = await prisma.account.create({
+      data: {
+        balance: 100,
+        user: {
+          create: {
             userName,
-            password:token,
+            password: token,
             status: false,
-
-
+          },
         },
-
-
-
-    // const user = new createUser();    
-
-
-
-
+      },
     });
-
-    return res.status(201).json(user);
-
-
-});
-
-
-
-
-toDoRoutes.post("/account", async (req: Request, res: Response) => {
-
-    const {  authorId } = req.body;
-
-    const account = await prisma.account.create({
-        data: {
-
-            // balance: 100,
-            authorId,
-        
-        },
-    });
-
-    return res.status(201).json(account);
-    
-});
-
-
-
-
-
+    console.log("usuário criado com successo!");
+    return res.status(201).json({ userName, status: false, account });
+  });
+  
 
 
 
@@ -102,27 +65,30 @@ toDoRoutes.get("/user", async (req: any, res: any) => {
 //Rota para pegar usuário por nome
 toDoRoutes.get("/user/:userName", async (req: Request, res: Response) => {
 
-    const userName = req.params.userName;
+  const userName = req.params.userName;
 
-    console.log(userName);
+  console.log(userName);
 
-    const user = await prisma.user.findUnique({
-        
-        where: {
-            userName: userName
-        },
-       select: { 
-         userName: true,
-         password: true
-      }
+  const user = await prisma.user.findUnique({
+      
+      where: {
+          userName: userName
+      },
+     select: { 
+       userName: true,
+       password: true,
+       account: {
+         select: {
+           balance: true
+         }
+       }
+    }
 
-      });
+    });
 
-
-    console.log('Usuário encontrado!', user);
-    return res.status(200).json(user);
-    
-
+  console.log('Usuário encontrado!', user);
+  return res.status(200).json({user});
+  
 });
 
 
@@ -131,14 +97,18 @@ toDoRoutes.get("/user/:userName", async (req: Request, res: Response) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 ////////////////////////
-
-
-
-
-
-
-
 
 // Update
 
@@ -177,3 +147,23 @@ toDoRoutes.put("/user", async (req, res) => {
 
 
 module.exports = toDoRoutes;
+
+
+
+// toDoRoutes.post("/account", async (req: Request, res: Response) => {
+
+//     const {  authorId } = req.body;
+//     const balance = 100;
+
+//     const account = await prisma.account.create({
+//         data: {
+
+//             balance,
+//             authorId,
+        
+//         },
+//     });
+
+//     return res.status(201).json(account);
+    
+// });

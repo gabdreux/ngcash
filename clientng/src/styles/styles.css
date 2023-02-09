@@ -1,0 +1,244 @@
+@media only screen and (max-width: 768px) {
+    .bgBox {
+      padding: 10px;
+    }
+    .header-logo {
+        width: 100%;
+      }
+    div.menu__buttons-container {
+      display: none;
+    }
+    div.menu__logo-container {
+      width: 40%;
+    }
+
+}
+
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(152, 151, 151);
+}
+  
+
+
+.bgBox {
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    flex-direction: column;
+  }
+  
+  .menu {
+    background-color: black;
+    display: flex;
+    width: 100%;
+    height: 80px;
+    align-items: center;
+  }
+  
+  .menu__logo-container {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  
+  .menu__buttons-container {
+    width: 80%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 1em;
+  }
+  
+  /* .menu__button {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 0, 157);
+    border: none;
+    padding: 10px 20px;
+    margin-left: 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+  } */
+
+  .inputBox {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  input {
+    background-color: "white";
+    border-radius: "30px"; 
+    padding-left: "1em";
+  }
+
+  .activeLink {
+    color: white;
+    padding: 10px 20px;
+    margin-left: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  a:hover {
+   color: rgb(255, 0, 157);
+  }
+
+  .tableBox {
+    width: 100%;
+  }
+  
+
+p, a, h1, h2, h3, h4, text {
+  color: white;
+  margin: none;
+  padding: 5px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+li {
+  padding: 5px;
+}
+
+.greetings{
+  margin-bottom: 15px;
+}
+
+ .logo2 {
+  width: 100px;
+ }
+
+
+
+
+ @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  padding: 1rem 0.5rem;
+}
+
+section {
+    width: 100%;
+    max-width: 420px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    padding-bottom: 1rem;
+}
+
+
+input[type="text"],
+input[type="password"],
+button,
+textarea {
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+input:focus{
+  outline: rgb(255, 0, 157);
+  border-color: rgb(255, 0, 157);
+}
+
+
+#signup{
+  margin-top: 20px;
+  width: 120px;
+}
+
+label {
+  margin-top: 1rem;
+  color: #fff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+.instructions {
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    background: #000;
+    color: #fff;
+    padding: 0.25rem;
+    position: relative;
+    bottom: -10px;
+}
+
+.instructions > svg {
+    margin-right: 0.25rem;
+}
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
+.hide {
+    display: none;
+}
+
+.valid {
+    color: limegreen;
+    margin-left: 0.25rem;
+}
+
+.invalid {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.line {
+    display: inline-block;
+}
+
