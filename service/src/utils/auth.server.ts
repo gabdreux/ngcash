@@ -55,21 +55,49 @@ export const register = async (form: RegisterForm, req: Request, res: Response) 
 
 
 
+// export const login = async (form: LoginForm, req: Request, res: Response) => {
+
+
+//     const user = await prisma.user.findUnique({
+
+//         where: { userName: form.userName}
+//     });
+
+
+//     if ( !user || !(await bcrypt.compare(form.password, user.password)) ) {
+
+//         return res.status(400).json("Login incorreto! Verifique suas credenciais.");
+
+//     } else {
+
+//         // create here your JWTs token
+//         res.json({ 'success': `User ${user.userName} is logged in` });
+//     };
+    
+//     return null;
+
+// };
+
 export const login = async (form: LoginForm, req: Request, res: Response) => {
-
-
+    
+    
+    
     const user = await prisma.user.findUnique({
-
-        where: { userName: form.userName}
+        where: { userName: form.userName }
     });
 
+    if (!user) {
+        return res.status(400).json("Usuário não encontrado.");
+    }
 
-    if ( !user || !(await bcrypt.compare(form.password, user.password)) ) {
+    const isPasswordValid = await bcrypt.compare(form.password, user.password);
 
-        return res.status(400).json("Login incorreto! Verifique suas credenciais.");
+    if (!isPasswordValid) {
+        return res.status(400).json("Senha incorreta.");
+    }
 
-    } 
-    
+    // create here your JWTs token
+    res.json({ 'success': `User ${user.userName} is logged in` });
     return null;
-
 };
+

@@ -1,146 +1,97 @@
-import * as React from 'react';
-import { InputField } from './inputField';
-import { useState } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
+import  AuthContext  from '../context/AuthProvider';
+import axios from '../api/axios';
+
+const LOGIN_URL = '/login';
+
+const LoginLayout = () => {
+
+  const { setAuth } = useContext(AuthContext);
+  const userRef = useRef<HTMLInputElement>(null);
+  const errRef: any = useRef();
+
+  const [user, setUser] = useState('');
+  const [pwd, setPwd] = useState('');
+  const [errMsg, setErrMsg] = useState('');
+  const [success, setSuccess] = useState(false); //or use a route to navigation
+
+
+  useEffect(() => {
+
+    if (userRef.current != null) {
+        userRef.current.focus();
+    }
+     
+  }, []);
+
+
+  useEffect(() => {
+    setErrMsg('');
+  }, [user, pwd]);
 
 
 
-
-export default function LoginLayout () {
-
-
-  const [tests, setTests] = useState('');
-  
-  const handleSubmit = async (userName: string,  password: string) => {
-    console.log(userName, password);
-   
-    // await axios.get(`http://localhost:5000/user/${userName}`).then((res) => setTests(res.data)).catch((err) => console.log(err));
-
-    //colocar rota do nextjs aqui 
-    console.log(tests);
-
-  };
-
-  const [action, setAction] = useState('login');
-
-
-  const [formData, setFormData] = useState ({
-
-    userName: '',
-    password: '',
-
-  })
-
-
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
-
-    setFormData( form => ({
-      ...form,
-      [field]: event.target.value
-    }))
-
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+    // console.log(user, pwd); 20:39 do 01.
+    setUser('');
+    setPwd('');
+    setSuccess(true);
   }
-
 
   return (
 
+    <>
 
-    <div className='bgBox'>
-
-
-      <div className='inputBox'>
-        <div>
-          <h2>
-            BEM-VINDO!
-          </h2>
-        </div>
-
-
-        <div>
-          <h3>
-             { action === 'login' ? 'FAÇA O LOGIN PARA CONTINUAR' : 'REGISTRE-SE PARA COMEÇAR'}
-          </h3>
-        </div>
-
-
-        
-
-        
-        {/* <Card sx={{ backgroundColor: "white", padding: "1em", borderRadius: "10px"}}>
-          {
-            JSON.stringify(formData)
-          }
-        </Card>
-  */}
-
-
-
-
-        <form>
-
-          <InputField
-          
-          htmlFor='userName'
-          label='Username:'
-          value={formData.userName}
-          onChange={e => handleInputChange(e, 'userName')}
-          
-          />
-
-          <InputField
-          
-          htmlFor='password'
-          label='Senha:'
-          type="password"
-          value={formData.password}
-          onChange={e => handleInputChange(e, 'password')}
-          
-          />
-
-{/* 
-          {
-            action !== 'login' ? <>
-             
-              <InputField
-          
-              htmlFor='name'
-              label='Primeiro nome:'
-              value={formData.name}
-              onChange={e => handleInputChange(e, 'name')}
-              
-              />
-            </>: null
-          }; */}
-
-        </form>
-
-
-        <div>
-            <button 
-              type='button'  
-              name='_action' 
-              value={action}
-              onClick={() => {
-                handleSubmit(formData.userName, formData.password);
-              }}>
-            { action === 'login' ? 'LOGIN' : 'SIGN UP'}
-            </button>
-        </div>
-
-
-        <div>
-
-          <button onClick={ () => setAction(action === 'login' ? 'login' : 'login')}>LOGIN</button>
-          <button onClick={ () => setAction(action === 'login' ? 'register' : 'register')}>SIGN UP</button>
-
-        </div>
-
-
+    {success ? (
+      <div>
+        <h1>You are logged in!</h1>
       </div>
+    ) : (
+    <div>
+
+      <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+      <h1>Sign In</h1>
+
+
+      <form onSubmit={handleSubmit}>
+        <label htmlFor='username'>Username:</label>
+        <input 
+        type="text"
+        id='username'
+        ref={userRef}
+        autoComplete="off"
+        onChange={(e) => setUser(e.target.value)}
+        value={user}
+        required
+        />
+
+        <label htmlFor='password'>Password:</label>
+        <input 
+        type="password"
+        id='password'
+        onChange={(e) => setPwd(e.target.value)}
+        value={pwd}
+        required
+        />
+
+        <button className='sign'>Sign In</button>
+
+      </form>
+
+      <p>Need an Account? <br/>
+      <span className='line'>
+        {/*put router link here*/}
+        <a href='#'>Sign Up</a>
+      </span>
+      </p>
+
 
     </div>
+      )}
+    </>
+  )
+};
 
 
-
-  );
-}
+export default LoginLayout;

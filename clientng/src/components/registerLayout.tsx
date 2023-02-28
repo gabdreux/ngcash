@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, ReactHTML } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "@/api/axios";
@@ -229,7 +229,7 @@ const ResgisterLayout = () => {
                     Must match the first password input field.<br/>
                 </p>                
 
-                <button id="signup" disabled={!validName || !validPwd || !validMatchPwd ? true: false}>Sign Up</button>
+                <button className="sign" disabled={!validName || !validPwd || !validMatchPwd ? true: false}>Sign Up</button>
             </form>
 
             <div className="registered">

@@ -5,7 +5,7 @@ import express, { Request, Response } from 'express';
 
 
 //Usado para criar rotas
-const toDoRoutes = express.Router();
+const router = express.Router();
 
 //Prisma => usado para criar esquemas para o DB.
 const { PrismaClient } = require("@prisma/client")
@@ -18,7 +18,7 @@ const jwt = require('jsonwebtoken');
 
 
 // Create
-toDoRoutes.post("/register", async (req: Request, res: Response) => {
+router.post("/register", async (req: Request, res: Response) => {
     const { userName, password } = req.body;
     const token = jwt.sign({ password }, process.env.SECRET);
   
@@ -29,7 +29,7 @@ toDoRoutes.post("/register", async (req: Request, res: Response) => {
     });
   
     if (userAlreadyExists) {
-      return res.status(404).json("User name already taken");
+      return res.status(404).json("Username already taken");
     }
   
   const account = await prisma.account.create({
@@ -53,7 +53,7 @@ toDoRoutes.post("/register", async (req: Request, res: Response) => {
 
 // Read
 
-toDoRoutes.get("/user", async (req: any, res: any) => {
+router.get("/user", async (req: any, res: any) => {
 
     const users = await prisma.user.findMany()
     return res.status(200).json(users);
@@ -63,7 +63,7 @@ toDoRoutes.get("/user", async (req: any, res: any) => {
 
 
 //Rota para pegar usuário por nome
-toDoRoutes.get("/user/:userName", async (req: Request, res: Response) => {
+router.get("/user/:userName", async (req: Request, res: Response) => {
 
   const userName = req.params.userName;
 
@@ -77,6 +77,7 @@ toDoRoutes.get("/user/:userName", async (req: Request, res: Response) => {
      select: { 
        userName: true,
        password: true,
+       id: true,
        account: {
          select: {
            balance: true
@@ -90,6 +91,36 @@ toDoRoutes.get("/user/:userName", async (req: Request, res: Response) => {
   return res.status(200).json({user});
   
 });
+
+
+
+
+import { login } from ".././utils/auth.server";
+
+router.post('/login', login);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -112,7 +143,7 @@ toDoRoutes.get("/user/:userName", async (req: Request, res: Response) => {
 
 // Update
 
-toDoRoutes.put("/user", async (req, res) => {
+router.put("/user", async (req, res) => {
 
     const {id, userName, status} = req.body;
 
@@ -146,7 +177,7 @@ toDoRoutes.put("/user", async (req, res) => {
 });
 
 
-module.exports = toDoRoutes;
+module.exports = router;
 
 
 

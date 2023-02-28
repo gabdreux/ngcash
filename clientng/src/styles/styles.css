@@ -185,9 +185,8 @@ input:focus{
 }
 
 
-#signup{
+.sign{
   margin-top: 20px;
-  width: 120px;
 }
 
 label {
