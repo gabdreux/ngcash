@@ -1,10 +1,12 @@
+require('dotenv').config();
 import express, { Request, Response } from 'express';
 const router = require("./routes/routes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require ("cors");
 // const logEvents = require("../middeleware/logEvents.js");
-const { logger } = require("../middeleware/logEvents.js");
+const { logger } = require("../middleware/logEvents.js");
+
 
 
 const options = {
@@ -35,24 +37,9 @@ app.get('/', (req: Request, res: Response) => { res.send('<h1>Hello World From S
 
 
 
-// const http = require('http');
-// const path = require('path');
-// const fs = require('fs');
-// const fsPromises = require('fs').promises;
+const authRouter = require('./routes/routes');
 
-
-// app.get('^/$|/index(.html)?', (req: Request, res: Response) => { 
-//     res.sendFile(path.join(__dirname, 'views', 'index.html');
-// });
-
-
-// app.get('^/$|/index(.html)?', (req: Request, res: Response) => { 
-//     res.redirect(301, '/index'); //302 by default
-// });
-
-// app.get('/', (req: Request, res: Response) => {
-//     res.status(404).sendFile(path.join(__dirname, 'views', '404.html')
-// };
+app.use('/api', authRouter);
 
 
 

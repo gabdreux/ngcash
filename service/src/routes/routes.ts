@@ -13,7 +13,6 @@ const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient();
 
 require("dotenv-safe").config();
-const jwt = require('jsonwebtoken');
 
 
 
@@ -104,10 +103,27 @@ router.post('/login', login);
 
 
 
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
+const { verifyToken, verifyRefreshToken } = require ('../../middleware/auth.middleware');
+
+router.get('/authTest', verifyToken, (req, res) => {
+  return res.status(200).json({ teste: true });
+});
 
 
+router.post('/auth', (req, res) => {
+  const { userName, password } = req.body;
+  const refreshToken = jwt.sign({ userName, password }, JWT_REFRESH_SECRET, { expiresIn: '1800s' });
+  const token = jwt.sign({ refreshToken }, JWT_SECRET, { expiresIn: '20s' });
+  return res.status(200).json({ token, refreshToken });
+});
 
-
+router.post('/refresh', verifyRefreshToken, (req, res) => {
+  const { refreshToken } = req.body;
+  const token = jwt.sign({ refreshToken }, JWT_SECRET, { expiresIn: '20s' });
+  return res.status(200).json({ token });
+});
 
 
 
@@ -143,58 +159,42 @@ router.post('/login', login);
 
 // Update
 
-router.put("/user", async (req, res) => {
+// router.put("/user", async (req, res) => {
 
-    const {id, userName, status} = req.body;
+//     const {id, userName, status} = req.body;
 
-    if(!id){
-        return res.status(400).json("Id is not valid!")
-    };
+//     if(!id){
+//         return res.status(400).json("Id is not valid!")
+//     };
 
-    const userAlreadyExist = await prisma.user.findUnique({
-        where: {
-            id,
-        }
-    });
+//     const userAlreadyExist = await prisma.user.findUnique({
+//         where: {
+//             id,
+//         }
+//     });
 
-    if(!userAlreadyExist){
-        return res.status(404).json("Esse usuário já existe!")
-    }
+//     if(!userAlreadyExist){
+//         return res.status(404).json("Esse usuário já existe!")
+//     }
 
-    const user = await prisma.user.update ({
+//     const user = await prisma.user.update ({
 
-        where: {
-            id,
-        },
-        data: {
-            userName,
-            status: true,
-        },
-    });
+//         where: {
+//             id,
+//         },
+//         data: {
+//             userName,
+//             status: true,
+//         },
+//     });
 
-    return res.status(200).json(user);
+//     return res.status(200).json(user);
 
-});
+// });
 
 
 module.exports = router;
 
 
 
-// toDoRoutes.post("/account", async (req: Request, res: Response) => {
 
-//     const {  authorId } = req.body;
-//     const balance = 100;
-
-//     const account = await prisma.account.create({
-//         data: {
-
-//             balance,
-//             authorId,
-        
-//         },
-//     });
-
-//     return res.status(201).json(account);
-    
-// });

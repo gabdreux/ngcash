@@ -42,7 +42,7 @@ const ResgisterLayout = () => {
          
     }, []);
 
-
+    // Valida o nome de usuário toda vez que ele é alterado
     useEffect(() => {
 
         const result = USER_REGEX.test(userName);
@@ -52,7 +52,7 @@ const ResgisterLayout = () => {
          
     }, [userName]);
 
-
+    // Valida a senha e a senha de confirmação toda vez que eles são alterados
     useEffect(() => {
 
         const result = PWD_REGEX.test(pwd);
@@ -65,12 +65,12 @@ const ResgisterLayout = () => {
     }, [pwd, matchPwd]);
 
 
-    
+     // Limpa a mensagem de erro toda vez que o nome de usuário, a senha ou a senha de confirmação são alterados
     useEffect(() => {
         setErrMsg('');
     }, [userName, pwd, matchPwd]);
 
-
+    // Lida com a submissão do formulário de registro
     const handleSubmit = async (e:any) => {
         e.preventDefault();
         const v1 = USER_REGEX.test(userName);
