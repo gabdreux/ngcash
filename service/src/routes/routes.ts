@@ -1,6 +1,8 @@
 //Express => Para habilitar o CRUD.
 import express, { Request, Response } from 'express';
 
+import bcrypt from "bcryptjs";
+
 
 
 
@@ -65,6 +67,7 @@ router.get("/user", async (req: any, res: any) => {
 router.get("/user/:userName", async (req: Request, res: Response) => {
 
   const userName = req.params.userName;
+  const userPwd = req.params.pwd;
 
   console.log(userName);
 
@@ -86,17 +89,12 @@ router.get("/user/:userName", async (req: Request, res: Response) => {
 
     });
 
+  // const senhaCorreta = await bcrypt.compare(userPwd, user.password);
+  // console.log(senhaCorreta);
   console.log('Usuário encontrado!', user);
   return res.status(200).json({user});
   
 });
-
-
-
-
-import { login } from ".././utils/auth.server";
-
-router.post('/login', login);
 
 
 
@@ -107,6 +105,7 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
 const { verifyToken, verifyRefreshToken } = require ('../../middleware/auth.middleware');
 
+
 router.get('/authTest', verifyToken, (req, res) => {
   return res.status(200).json({ teste: true });
 });
@@ -116,13 +115,14 @@ router.post('/auth', (req, res) => {
   const { userName, password } = req.body;
   const refreshToken = jwt.sign({ userName, password }, JWT_REFRESH_SECRET, { expiresIn: '1800s' });
   const token = jwt.sign({ refreshToken }, JWT_SECRET, { expiresIn: '20s' });
-  return res.status(200).json({ token, refreshToken });
+  return res.status(200).json({ token, refreshToken, userName });
 });
 
-router.post('/refresh', verifyRefreshToken, (req, res) => {
+router.post('/refresh', verifyRefreshToken, (req, res) => {               
+  const { userName } = req.body;
   const { refreshToken } = req.body;
   const token = jwt.sign({ refreshToken }, JWT_SECRET, { expiresIn: '20s' });
-  return res.status(200).json({ token });
+  return res.status(200).json({ token, userName });
 });
 
 

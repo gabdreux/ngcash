@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import  AuthContext  from '../context/AuthProvider';
 import axios from '../api/axios';
+import ActiveLink from "./activeLink";
 
-const LOGIN_URL = '/login';
 
 const LoginLayout = () => {
 
@@ -26,18 +26,35 @@ const LoginLayout = () => {
 
 
   useEffect(() => {
-    setErrMsg('');
+    // setErrMsg('');
+    console.log('useEffect', user);
   }, [user, pwd]);
 
 
 
   const handleSubmit = async (e:any) => {
+    console.log(user, pwd);
     e.preventDefault();
-    // console.log(user, pwd); 20:39 do 01.
-    setUser('');
-    setPwd('');
+    try {
+    const validation = axios.get(
+        `http://localhost:5000/user/${user}`
+    // {
+    //     headers: { 'Content-Type': 'application/json'},
+    //     withCredentials: true
+    // } 
+    );
+    const userObj = {
+      userName: "",
+      accountId: "",
+    };
+    sessionStorage.setItem("user", JSON.stringify(userObj));
     setSuccess(true);
-  }
+  } catch  (e) {
+    console.log((e as Error).message);
+    setErrMsg('Usuário não encontrado ou inválido')
+  };
+
+}
 
   return (
 
@@ -82,7 +99,7 @@ const LoginLayout = () => {
       <p>Need an Account? <br/>
       <span className='line'>
         {/*put router link here*/}
-        <a href='#'>Sign Up</a>
+        <ActiveLink href={"/register"}>Sign up</ActiveLink>
       </span>
       </p>
 

@@ -46,6 +46,7 @@ const ResgisterLayout = () => {
     useEffect(() => {
 
         const result = USER_REGEX.test(userName);
+        //implementar um get de user para saber se já existe um usuário no banco.
         console.log(result);
         console.log(userName);
         setValidName(result);

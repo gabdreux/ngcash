@@ -4,6 +4,9 @@ import 'src/styles/styles.css';
 import Menu from '@/components/menu';
 import { AuthProvider } from '../context/AuthProvider';
 
+import PersistLogin from "@/components/PersistLogin";
+import { Outlet } from "react-router-dom";
+
 
 
 function MyApp({ Component, pageProps}: AppProps) {
@@ -12,10 +15,13 @@ function MyApp({ Component, pageProps}: AppProps) {
 
     <div>
       <AuthProvider>
-        <Menu/>
-        <BgLayout>
-          <Component {...pageProps}/>
-        </BgLayout>
+        <PersistLogin>
+          <Menu/>
+          <BgLayout>
+            <Component {...pageProps}/>
+          </BgLayout>
+          <Outlet />
+        </PersistLogin>
       </AuthProvider>
     </div>
 

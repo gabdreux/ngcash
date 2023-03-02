@@ -1,22 +1,11 @@
-export interface GetUserResults {
-    info:    Info;
-    results: User[];
-}
-
-export interface Info {
-    count: number;
-    pages: number;
-    next:  string;
-    prev:  null;
-}
-
 export interface User {
+    id: number;
     userName: string;
     password: string;
-    id: number;
-    account:  Account;
-}
+    status: boolean;
+    accountId: number;
+  }
 
-export interface Account {
-    balance: string;
+export interface Props {
+  users: User[];
 }
