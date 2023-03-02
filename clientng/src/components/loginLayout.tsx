@@ -36,17 +36,14 @@ const LoginLayout = () => {
     console.log(user, pwd);
     e.preventDefault();
     try {
-    const validation = axios.get(
-        `http://localhost:5000/user/${user}`
-    // {
-    //     headers: { 'Content-Type': 'application/json'},
-    //     withCredentials: true
-    // } 
-    );
+
     const userObj = {
-      userName: "",
-      accountId: "",
-    };
+        userName: user,
+        userPwd: pwd,
+    };  
+
+    const response = await axios.post('/api/login', { user, pwd });
+
     sessionStorage.setItem("user", JSON.stringify(userObj));
     setSuccess(true);
   } catch  (e) {

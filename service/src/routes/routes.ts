@@ -64,17 +64,16 @@ router.get("/user", async (req: any, res: any) => {
 
 
 //Rota para pegar usuário por nome
-router.get("/user/:userName", async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
 
-  const userName = req.params.userName;
-  const userPwd = req.params.pwd;
+  
 
-  console.log(userName);
+  console.log(req.body);
 
   const user = await prisma.user.findUnique({
       
       where: {
-          userName: userName
+          userName: req.body.user
       },
      select: { 
        userName: true,
@@ -88,11 +87,19 @@ router.get("/user/:userName", async (req: Request, res: Response) => {
     }
 
     });
-
-  // const senhaCorreta = await bcrypt.compare(userPwd, user.password);
-  // console.log(senhaCorreta);
-  console.log('Usuário encontrado!', user);
-  return res.status(200).json({user});
+    const pwd = req.body.pwd;
+    console.log(user);
+    // const token = jwt.sign({ pwd }, process.env.SECRET);
+    const token = jwt.sign({ pwd }, JWT_SECRET);
+    if (token == user.password) {
+      console.log("Senha correta");
+    } else {
+      console.log("Senha correta");
+    }
+    // console.log(user.password);
+    // console.log(token.toString());
+  // console.log('Usuário encontrado!', user);
+  // return res.status(200).json({user});
   
 });
 
