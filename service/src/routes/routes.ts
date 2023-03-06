@@ -5,7 +5,6 @@ import bcrypt from "bcryptjs";
 
 
 
-
 //Usado para criar rotas
 const router = express.Router();
 
@@ -20,20 +19,24 @@ require("dotenv-safe").config();
 
 // Create
 router.post("/register", async (req: Request, res: Response) => {
-    const { userName, password } = req.body;
-    const token = jwt.sign({ password }, process.env.SECRET);
+  const { userName, pwd } = req.body;
+  const token = await bcrypt.hash(pwd, 10); // Gerar o hash da senha com o bcrypt
+  console.log(token);
+  console.log(pwd, userName);
   
-    const userAlreadyExists = await prisma.user.findUnique({
-      where: {
-        userName,
-      }
-    });
-  
-    if (userAlreadyExists) {
-      return res.status(404).json("Username already taken");
+  const userAlreadyExists = await prisma.user.findUnique({
+    where: {
+      userName,
     }
+  });
   
-  const account = await prisma.account.create({
+  if (userAlreadyExists) {
+    return res.status(409).json("Username already taken");
+  }
+  
+  let account;
+  if (!userAlreadyExists) {
+    account = await prisma.account.create({
       data: {
         balance: 100,
         user: {
@@ -45,10 +48,18 @@ router.post("/register", async (req: Request, res: Response) => {
         },
       },
     });
-    console.log("usuário criado com successo!");
-    return res.status(201).json({ userName, status: false, account });
-  });
+  }
   
+  const { id: accountId } = account; // extrai o id do objeto account
+  console.log("usuário criado com successo!");
+  return res.status(201).json({ userName, status: false, account, accountId });
+  
+  });
+
+
+  
+
+
 
 
 
@@ -62,18 +73,17 @@ router.get("/user", async (req: any, res: any) => {
 });
 
 
-
 //Rota para pegar usuário por nome
-router.post("/login", async (req: Request, res: Response) => {
+router.get("/user/:userName", async (req: Request, res: Response) => {
 
-  
+  const userName = req.params.userName;
 
-  console.log(req.body);
+  console.log(userName);
 
   const user = await prisma.user.findUnique({
       
       where: {
-          userName: req.body.user
+          userName: userName
       },
      select: { 
        userName: true,
@@ -87,21 +97,76 @@ router.post("/login", async (req: Request, res: Response) => {
     }
 
     });
-    const pwd = req.body.pwd;
-    console.log(user);
-    // const token = jwt.sign({ pwd }, process.env.SECRET);
-    const token = jwt.sign({ pwd }, JWT_SECRET);
-    if (token == user.password) {
-      console.log("Senha correta");
-    } else {
-      console.log("Senha correta");
+
+  console.log('Usuário encontrado!', user);
+  return res.status(200).json({user});
+  
+});
+
+
+
+//Rota para login
+router.post("/login", async (req: Request, res: Response) => {
+
+  
+
+  console.log(res);
+
+  const user = await prisma.user.findUnique({
+      
+      where: {
+          userName: req.body.user
+      },
+     select: { 
+       userName: true,
+       password: true,
+       id: true,
+       accountId: true,
+       account: {
+         select: {
+           balance: true
+         }
+       }
     }
+
+    });
+
+    const pwd = req.body.pwd;
+    const userPassword = user.password;
+    const token = jwt.sign({userPassword}, process.env.SECRET);
+    console.log(pwd);
+    console.log(userPassword);
+    console.log(token);
+    
+    try {
+      const isPasswordCorrect = await bcrypt.compare(pwd, userPassword);
+      if (isPasswordCorrect) {
+        console.log("Senha correta");
+      } else {
+        console.log("Senha incorreta");
+      }
+    } catch (err) {
+      console.log("Erro ao verificar o token");
+    }
+    
+
+    // if (user && (token == user.password)) {
+      const resultado = { 
+        userName: user.userName,
+        accountId: user.accountId
+      };
+    
+      return res.status(200).json({ message: 'Login successful', ...resultado });
+    // }
     // console.log(user.password);
     // console.log(token.toString());
   // console.log('Usuário encontrado!', user);
-  // return res.status(200).json({user});
+
   
 });
+
+
+
 
 
 

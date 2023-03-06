@@ -15,6 +15,8 @@ const LoginLayout = () => {
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false); //or use a route to navigation
 
+  
+
 
   useEffect(() => {
 
@@ -25,31 +27,35 @@ const LoginLayout = () => {
   }, []);
 
 
-  useEffect(() => {
-    // setErrMsg('');
-    console.log('useEffect', user);
-  }, [user, pwd]);
+  // useEffect(() => {
+  //   // setErrMsg('');
+  //   console.log('useEffect', user);
+  // }, [user, pwd]);
 
 
 
   const handleSubmit = async (e:any) => {
     console.log(user, pwd);
     e.preventDefault();
+   
+    const userObj = {
+      userName: user,
+      userPwd: pwd,
+  };
+   
+   
     try {
 
-    const userObj = {
-        userName: user,
-        userPwd: pwd,
-    };  
+  
 
     const response = await axios.post('/api/login', { user, pwd });
-
-    sessionStorage.setItem("user", JSON.stringify(userObj));
+    console.log(response)
     setSuccess(true);
+    localStorage.setItem("user", JSON.stringify(userObj));
   } catch  (e) {
     console.log((e as Error).message);
     setErrMsg('Usuário não encontrado ou inválido')
-  };
+  }; 
 
 }
 
@@ -58,9 +64,13 @@ const LoginLayout = () => {
     <>
 
     {success ? (
-      <div>
-        <h1>You are logged in!</h1>
-      </div>
+    
+    alert("You are logged in!"),
+
+    setTimeout(function() {
+      window.location.href = "/";
+    }, 3000) 
+
     ) : (
     <div>
 

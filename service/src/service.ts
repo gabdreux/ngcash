@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv-safe').config();
 import express, { Request, Response } from 'express';
 const router = require("./routes/routes");
 const app = express();

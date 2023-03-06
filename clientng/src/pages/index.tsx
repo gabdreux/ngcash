@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import TransactionsLayout from "../components/transactionsLayout";
 
 interface UserData {
   userName: string;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const UserPage = ({ userName }: Props) => {
-  console.log(userName);
+  console.log("Username:", userName);
   const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
@@ -47,7 +48,11 @@ const UserPage = ({ userName }: Props) => {
           <p>Balance: {userData.account.balance}</p>
         </>
       ) : (
-        <p>Loading...</p>
+        <>
+          <p>Loading...</p>
+          {/* <TransactionsLayout/> */}
+        </>
+
       )}
     </div>
   );

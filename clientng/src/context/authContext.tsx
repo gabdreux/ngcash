@@ -26,7 +26,7 @@ interface AuthContextData {
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC = ({  }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const login = (token: string) => {
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
   }, []);
 
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, login, logout }}></AuthContext.Provider>;
 };
 
 export const useAuth = () => useContext(AuthContext);
