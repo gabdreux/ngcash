@@ -131,6 +131,8 @@ router.post("/login", async (req: Request, res: Response) => {
 
     });
 
+
+
     const pwd = req.body.pwd;
     const userPassword = user.password;
     const token = jwt.sign({userPassword}, process.env.SECRET);
@@ -142,8 +144,12 @@ router.post("/login", async (req: Request, res: Response) => {
       const isPasswordCorrect = await bcrypt.compare(pwd, userPassword);
       if (isPasswordCorrect) {
         console.log("Senha correta");
+        localStorage.setItem('userName', user.userName);
+        localStorage.setItem('accountId', user.accountId);
+        localStorage.setItem('token', token);
       } else {
         console.log("Senha incorreta");
+        
       }
     } catch (err) {
       console.log("Erro ao verificar o token");

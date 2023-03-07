@@ -47,3 +47,4 @@ const BgLayout = ({children}:{children:React.ReactNode}) => {
 
 
 export default BgLayout;
+
