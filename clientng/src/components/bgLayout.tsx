@@ -1,8 +1,7 @@
 import { usePathname } from 'next/navigation';
 import { ActiveLinkProps } from './activeLink';
 import { useRouter } from 'next/router';
-  
-
+import useAuth from '../hooks/useAuth';
 
 
 const BgLayout = ({children}:{children:React.ReactNode}) => {
@@ -10,6 +9,10 @@ const BgLayout = ({children}:{children:React.ReactNode}) => {
     const router = useRouter();
     const isLoginPage = router.pathname === '/login';
     const isRegisterPage = router.pathname === '/register';
+
+    const { auth } = useAuth();
+    const userName = auth?.userName || '';
+    const saldo = auth?.account?.balance || '';
 
     return (
 
@@ -28,10 +31,10 @@ const BgLayout = ({children}:{children:React.ReactNode}) => {
 
                 <div className={isLoginPage  || isRegisterPage ?"hide" : "greetings"}>
                     <h2>
-                        OLÁ, _userName!
+                        OLÁ, {userName}!
                     </h2>
                     <h4>
-                        Seu saldo atual é de: _Saldo.
+                        Seu saldo atual é de: {saldo}.
                     </h4>
                 </div>
 
@@ -43,8 +46,4 @@ const BgLayout = ({children}:{children:React.ReactNode}) => {
 
 }
 
-
-
-
 export default BgLayout;
-

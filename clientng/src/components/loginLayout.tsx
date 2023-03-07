@@ -34,30 +34,51 @@ const LoginLayout = () => {
 
 
 
-  const handleSubmit = async (e:any) => {
-    console.log(user, pwd);
-    e.preventDefault();
+//   const handleSubmit = async (e:any) => {
+//     console.log(user, pwd);
+//     e.preventDefault();
    
-    const userObj = {
-      userName: user,
-      userPwd: pwd,
-  };
+//     const userObj = {
+//       userName: user,
+//       userPwd: pwd,
+//   };
    
    
-    try {
+//     try {
 
   
 
+//     const response = await axios.post('/api/login', { user, pwd });
+//     console.log(response)
+//     setSuccess(true);
+//     localStorage.setItem("user", JSON.stringify(userObj));
+//   } catch  (e) {
+//     console.log((e as Error).message);
+//     setErrMsg('Usuário não encontrado ou inválido')
+//   }; 
+
+// }
+
+const handleSubmit = async (e:any) => {
+  console.log(user, pwd);
+  e.preventDefault();
+ 
+  const userObj = {
+    userName: user,
+    userPwd: pwd,
+  };
+ 
+  try {
     const response = await axios.post('/api/login', { user, pwd });
     console.log(response)
     setSuccess(true);
-    localStorage.setItem("user", JSON.stringify(userObj));
+    localStorage.setItem("user", JSON.stringify(userObj)); // Armazena os dados do usuário no localStorage
   } catch  (e) {
     console.log((e as Error).message);
     setErrMsg('Usuário não encontrado ou inválido')
   }; 
-
 }
+
 
   return (
 
@@ -69,7 +90,7 @@ const LoginLayout = () => {
 
     setTimeout(function() {
       window.location.href = "/";
-    }, 3000) 
+    })
 
     ) : (
     <div>

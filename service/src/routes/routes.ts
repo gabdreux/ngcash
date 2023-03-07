@@ -105,6 +105,8 @@ router.get("/user/:userName", async (req: Request, res: Response) => {
 
 
 
+
+
 //Rota para login
 router.post("/login", async (req: Request, res: Response) => {
 
@@ -149,6 +151,7 @@ router.post("/login", async (req: Request, res: Response) => {
         localStorage.setItem('token', token);
       } else {
         console.log("Senha incorreta");
+        return res.status(401).json({ message: 'Incorrect username or password' });
         
       }
     } catch (err) {
@@ -272,6 +275,8 @@ router.post('/refresh', verifyRefreshToken, (req, res) => {
 
 
 module.exports = router;
+
+
 
 
 

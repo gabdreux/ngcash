@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 interface AuthContextType {
   auth: any;
@@ -14,15 +14,36 @@ interface Props {
 }
 
 //Cria e atualiza estado do Auth
+// export const AuthProvider: React.FC<Props> = ({ children }) => {
+//   const [auth, setAuth] = useState({});
+
+//   //Componente AUthProvider é renderizado com o valor do objeto do contexto
+//   return (
+//     <AuthContext.Provider value={{ auth, setAuth }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// Cria e atualiza estado do Auth
 export const AuthProvider: React.FC<Props> = ({ children }) => {
   const [auth, setAuth] = useState({});
 
-  //Componente AUthProvider é renderizado com o valor do objeto do contexto
+  // Verifica se o usuário está logado usando os dados armazenados no localStorage
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user && user.userName && user.userPwd) {
+      setAuth({ user: user.userName, pwd: user.userPwd });
+    }
+  }, []);
+
+  // Componente AuthProvider é renderizado com o valor do objeto do contexto
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
 
 export default AuthContext;
