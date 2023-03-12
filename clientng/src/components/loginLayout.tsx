@@ -2,35 +2,39 @@
   import AuthContext from '../context/AuthProvider';
   import axios from '../api/axios';
   import ActiveLink from "./activeLink";
-
-
+  interface AuthState {
+    isAuthenticated: boolean;
+  }
+  
   const getToken = () => sessionStorage.getItem('token');
-
+  
   const LoginLayout = () => {
-
+  
     const { setAuth } = useContext(AuthContext);
     const userRef = useRef<HTMLInputElement>(null);
     const errRef: any = useRef();
-
+  
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
     const [token, setToken] = useState(getToken());
-
+    const [isAuthenticated, setIsAuthenticated] = useState<AuthState["isAuthenticated"]>(false);
+  
     useEffect(() => {
       
       if (userRef.current != null) {
         userRef.current.focus();
       };
-
-
+  
+  
       const token = getToken();
       if (token) {
         setSuccess(true);
+        setIsAuthenticated(true);
       }
     }, []);
-
+  
     const handleSubmit = async (e:any) => {
       e.preventDefault();
     
@@ -42,31 +46,32 @@
       try {
         const response = await axios.post('/api/login', { user, pwd }, { withCredentials: true });
         const { data } = response;
-
+  
         setSuccess(true);        
+        setIsAuthenticated(true);
         sessionStorage.setItem("user", JSON.stringify(userObj));
-
+  
         // Obter o token da resposta da API
         const token = data.token;
-
+  
         // Armazenar o token no sessionStorage
         sessionStorage.setItem("token", token);
-
+  
       } catch (e) {
         console.log((e as Error).message);
         setErrMsg('Usuário não encontrado ou inválido')
       } 
     };
-
-
+  
+  
     const handleLogout = () => {
       sessionStorage.removeItem('token');
       setToken(null);
       setSuccess(false);
+      setIsAuthenticated(false);
     };
   
     const headers = { Authorization: `Bearer ${token}` };
- 
 
   return (
     <>
@@ -114,73 +119,3 @@
 };
 
 export default LoginLayout;
-
-
-
-
-
-// const LoginLayout = () => {
-
-//   const { setAuth } = useContext(AuthContext);
-//   const userRef = useRef<HTMLInputElement>(null);
-//   const errRef: any = useRef();
-
-//   const [user, setUser] = useState('');
-//   const [pwd, setPwd] = useState('');
-//   const [errMsg, setErrMsg] = useState('');
-//   const [success, setSuccess] = useState(false);
-
-//   useEffect(() => {
-    
-//     if (userRef.current != null) {
-//       userRef.current.focus();
-//     };
-
-//     // Obtém o token da cookie, se presente
-//     const token = document.cookie.split('; ')
-//       .find(row => row.startsWith('token='))
-//       ?.split('=')[1];
-//     if (token) {
-//       setSuccess(true);
-//     }
-//   }, []);
-
-//   const handleSubmit = async (e:any) => {
-//     e.preventDefault();
-  
-//     const userObj = {
-//       userName: user,
-//       // userPwd: pwd,
-//     };
-
-//     try {
-//       const response = await axios.post('/api/login', { user, pwd }, { withCredentials: true });
-//       const { data } = response;
-
-
-//       // setCookie('token', data.token, 30); expires in 30 days
-//       setCookie('token', data.token, 0.01); // expira em 15 minutos
-
-//       setSuccess(true);
-//       sessionStorage.setItem("user", JSON.stringify(userObj));
-//       // Obter o token da resposta da API
-//       const token = data.token;
-
-//       // Armazenar o token no sessionStorage
-//       sessionStorage.setItem("token", token);
-
-//     } catch (e) {
-//       console.log((e as Error).message);
-//       setErrMsg('Usuário não encontrado ou inválido')
-//     }; 
-//   }
-
-//   const setCookie = (name: string, value: string, days: number) => {
-//     const expires = new Date(Date.now() + days * 864e5).toUTCString();
-//     document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
-//   };
-
-//   const getCookie = (name: string) => {
-//     const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
-//     if (match) return decodeURIComponent(match[2]);
-//   };

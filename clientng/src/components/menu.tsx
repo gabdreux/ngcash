@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import ActiveLink from './activeLink';
 
 
@@ -22,7 +21,6 @@ const Menu: React.FC = () => {
       <div className="menu__buttons-container">
         <ActiveLink href={"/"}>Home</ActiveLink>
         <ActiveLink href={"/transactions"}>Transações</ActiveLink>  
-        <ActiveLink href={"/extrato"}>Extrato</ActiveLink>
       </div>
 
       

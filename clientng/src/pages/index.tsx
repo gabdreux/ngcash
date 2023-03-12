@@ -1,12 +1,23 @@
+import React, { useContext } from "react";
+import ActiveLink from "../components/activeLink";
+import AuthContext from "../context/AuthProvider";
 import DataTable from "@/components/extrato";
 
+function Index () {
 
-const Index = () => {
-
+  const { isAuthenticated } = useContext(AuthContext);
+  console.log("autenticado?", isAuthenticated); 
 
   return (
     <>
-      <h2 style={{ marginBottom: '30px' }}>Faça o login para continuar!</h2>
+      {isAuthenticated ? (
+        <DataTable />
+      ) : (
+        <div>
+          <h2>Please Log In</h2>
+          <ActiveLink href={"/login"}>Sign in</ActiveLink>
+        </div>
+      )}
     </>
   );
 };
