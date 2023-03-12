@@ -6,8 +6,7 @@ const Index = () => {
 
   return (
     <>
-      <p>Carregando extrato...</p>
-      <DataTable/>
+      <h2 style={{ marginBottom: '30px' }}>Faça o login para continuar!</h2>
     </>
   );
 };

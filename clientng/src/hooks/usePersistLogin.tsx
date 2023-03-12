@@ -1,23 +1,34 @@
 import { useEffect } from 'react';
-import  AuthContext  from '../context/AuthProvider';
+import useAuth from './useAuth';
 
 const usePersistLogin = () => {
-  const { userAuth, setUserAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
 
   useEffect(() => {
-    if (!userAuth) {
-      const storedUserName = localStorage.getItem('userName');
-      const storedBalance = localStorage.getItem('balance');
+    if (!auth.user) {
+      const storedUser = getCookie("user");
+      const storedPwd = getCookie("pwd");
+      const storedBalance = getCookie("balance");
 
-      if (storedUserName && storedBalance) {
+      if (storedUser && storedPwd && storedBalance) {
         const parsedBalance = parseFloat(storedBalance);
-        setUserAuth?.({ userName: storedUserName, balance: parsedBalance });
+        setAuth({ user: storedUser, pwd: storedPwd, balance: parsedBalance });
       }
     } else {
-      localStorage.setItem('userName', userAuth.userName);
-      localStorage.setItem('balance', userAuth.balance.toString());
+      document.cookie = `user=${auth.user}; path=/; max-age=${60 * 60 * 24 * 7}`;
+      document.cookie = `pwd=${auth.pwd}; path=/; max-age=${60 * 60 * 24 * 7}`;
+      document.cookie = `balance=${auth.balance}; path=/; max-age=${60 * 60 * 24 * 7}`;
     }
-  }, [userAuth, setUserAuth]);
+  }, [auth, setAuth]);
+
+  // Função auxiliar para obter o valor do cookie pelo nome
+  function getCookie(name: string): string | undefined {
+    const cookie = document.cookie.split(";").find((c) => c.trim().startsWith(`${name}=`));
+    if (cookie) {
+      return cookie.split("=")[1];
+    }
+    return undefined;
+  }
 
   return null;
 };

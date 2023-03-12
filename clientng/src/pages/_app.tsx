@@ -7,6 +7,8 @@ import PersistLogin from '../components/PersistLogin';
 import { useEffect } from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) {
+
+
   useEffect(() => {
     console.log('Bem-vindo ao meu aplicativo!');
   }, []);

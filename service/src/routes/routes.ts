@@ -19,7 +19,7 @@ require("dotenv-safe").config();
 
 // Create
 router.post("/register", async (req: Request, res: Response) => {
-  const { userName, pwd } = req.body;
+  const { userName, pwd } = req.body; // Pega o userName e o password vindo do front
   const token = await bcrypt.hash(pwd, 10); // Gerar o hash da senha com o bcrypt
   console.log(token);
   console.log(pwd, userName);
@@ -31,8 +31,10 @@ router.post("/register", async (req: Request, res: Response) => {
   });
   
   if (userAlreadyExists) {
+    console.log("Esse username já está sendo usado");
     return res.status(409).json("Username already taken");
-  }
+    
+  };
   
   let account;
   if (!userAlreadyExists) {
@@ -108,70 +110,137 @@ router.get("/user/:userName", async (req: Request, res: Response) => {
 
 
 //Rota para login
+const cookieParser = require('cookie-parser');
+router.use(cookieParser());
+
+
+router.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+
+// router.post("/login", async (req: Request, res: Response) => {
+//   try {
+//     const { user, pwd } = req.body;
+
+//     const User = await prisma.user.findUnique({
+//       where: {
+//         userName: user,
+//       },
+//       select: {
+//         userName: true,
+//         password: true,
+//         id: true,
+//         accountId: true,
+//         account: {
+//           select: {
+//             balance: true,
+//           },
+//         },
+//       },
+//     });
+
+//     if (!User) {
+//       return res.status(401).json({ message: "Incorrect username or password" });
+//     }
+
+//     const isPasswordCorrect = await bcrypt.compare(pwd, User.password);
+
+//     if (!isPasswordCorrect) {
+//       return res.status(401).json({ message: "Incorrect username or password" });
+//     }
+
+//     const payload = {
+//       id: User.id,
+//       userName: User.userName,
+//       accountId: User.accountId,
+//     };
+//     const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "15min" });
+
+//     const result = {
+//       ...payload,
+//       balance: User.account.balance,
+//       token
+//     };
+
+//     // res.cookie("token", token, {
+//     //   httpOnly: true,
+//     //   secure: false,
+//     //   sameSite: "none",
+//     //   maxAge: 900000,
+//     // });
+
+
+//     res.status(200).json({ message: "Login successful", ...result, token });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
 router.post("/login", async (req: Request, res: Response) => {
+  try {
+    const { user, pwd } = req.body;
 
-  
-
-  console.log(res);
-
-  const user = await prisma.user.findUnique({
-      
+    // Busca o usuário no banco de dados
+    const User = await prisma.user.findUnique({
       where: {
-          userName: req.body.user
+        userName: user,
       },
-     select: { 
-       userName: true,
-       password: true,
-       id: true,
-       accountId: true,
-       account: {
-         select: {
-           balance: true
-         }
-       }
-    }
-
+      select: {
+        userName: true,
+        password: true,
+        id: true,
+        accountId: true,
+        account: {
+          select: {
+            balance: true,
+          },
+        },
+      },
     });
 
-
-
-    const pwd = req.body.pwd;
-    const userPassword = user.password;
-    const token = jwt.sign({userPassword}, process.env.SECRET);
-    console.log(pwd);
-    console.log(userPassword);
-    console.log(token);
-    
-    try {
-      const isPasswordCorrect = await bcrypt.compare(pwd, userPassword);
-      if (isPasswordCorrect) {
-        console.log("Senha correta");
-        localStorage.setItem('userName', user.userName);
-        localStorage.setItem('accountId', user.accountId);
-        localStorage.setItem('token', token);
-      } else {
-        console.log("Senha incorreta");
-        return res.status(401).json({ message: 'Incorrect username or password' });
-        
-      }
-    } catch (err) {
-      console.log("Erro ao verificar o token");
+    // Retorna erro se o usuário não for encontrado
+    if (!User) {
+      return res.status(401).json({ message: "Incorrect username or password" });
     }
+
+    // Verifica se a senha está correta
+    const isPasswordCorrect = await bcrypt.compare(pwd, User.password);
+
+    // Retorna erro se a senha estiver incorreta
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ message: "Incorrect username or password" });
+    }
+
+    // Cria o payload do token
+    const payload = {
+      id: User.id,
+      userName: User.userName,
+      accountId: User.accountId,
+    };
+
+    // Gera o token com o payload e a chave secreta
+    const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "15min" });
+
+    // Cria o objeto de retorno com os dados do usuário e o token
+    const result = {
+      ...payload,
+      balance: User.account.balance,
+      token
+    };
+
+    res.header("Authorization", `Bearer ${token}`); // Adiciona o token no header de resposta
+    // Retorna os dados do usuário e adiciona o token no header de resposta
+    res.status(200).json({ message: "Login successful", ...result });
     
 
-    // if (user && (token == user.password)) {
-      const resultado = { 
-        userName: user.userName,
-        accountId: user.accountId
-      };
-    
-      return res.status(200).json({ message: 'Login successful', ...resultado });
-    // }
-    // console.log(user.password);
-    // console.log(token.toString());
-  // console.log('Usuário encontrado!', user);
-
-  
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 
@@ -182,28 +251,55 @@ router.post("/login", async (req: Request, res: Response) => {
 
 
 
+// importa o pacote jsonwebtoken
 const jwt = require('jsonwebtoken');
+
+// obtém as chaves secretas do ambiente
 const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
-const { verifyToken, verifyRefreshToken } = require ('../../middleware/auth.middleware');
+
+// importa os middlewares de autenticação
+const { verifyToken, verifyRefreshToken } = require('../../middleware/auth.middleware');
 
 
+
+
+// define uma rota para testar a autenticação
 router.get('/authTest', verifyToken, (req, res) => {
   return res.status(200).json({ teste: true });
 });
 
 
+
+// const session = require('express-session');
+import session from 'express-session';
+
+// define uma rota para autenticar o usuário
 router.post('/auth', (req, res) => {
   const { userName, password } = req.body;
+
+  // cria um token de atualização com o nome do usuário e a senha
   const refreshToken = jwt.sign({ userName, password }, JWT_REFRESH_SECRET, { expiresIn: '1800s' });
+
+  // cria um token de acesso com o token de atualização
   const token = jwt.sign({ refreshToken }, JWT_SECRET, { expiresIn: '20s' });
-  return res.status(200).json({ token, refreshToken, userName });
+
+    // Armazena o token na sessionStorage
+    // req.session.token = token;
+
+  // retorna os tokens gerados
+  return res.status(200).json({ token, refreshToken });
 });
 
-router.post('/refresh', verifyRefreshToken, (req, res) => {               
-  const { userName } = req.body;
+
+// define uma rota para atualizar o token de acesso
+router.post('/refresh', verifyRefreshToken, (req, res) => {
   const { refreshToken } = req.body;
+
+  // cria um novo token de acesso com o token de atualização recebido
   const token = jwt.sign({ refreshToken }, JWT_SECRET, { expiresIn: '20s' });
-  return res.status(200).json({ token, userName });
+
+  // retorna o novo token de acesso gerado
+  return res.status(200).json({ token });
 });
 
 
