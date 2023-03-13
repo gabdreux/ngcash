@@ -12,6 +12,7 @@ interface AuthResponse {
 export async function fetchAuthData() {
   try {
     const response = await axios.post<AuthResponse>('/api/auth');
+    console.log("RESPONSE AUTH:", response);
     return response.data;
   } catch (error) {
     console.log(error, "não foi possível coletar auth data");

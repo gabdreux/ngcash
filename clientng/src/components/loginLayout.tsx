@@ -54,6 +54,9 @@ const LoginLayout = () => {
       // Obter o token da resposta da API
       const token = data.token;
 
+      // Armazenar os dados do usuário no sessionStorage
+      sessionStorage.setItem("user", JSON.stringify(data));
+
       // Armazenar o token no sessionStorage
       sessionStorage.setItem("token", token);
 

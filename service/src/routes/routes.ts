@@ -121,64 +121,6 @@ router.use(function(req, res, next) {
 });
 
 
-// router.post("/login", async (req: Request, res: Response) => {
-//   try {
-//     const { user, pwd } = req.body;
-
-//     const User = await prisma.user.findUnique({
-//       where: {
-//         userName: user,
-//       },
-//       select: {
-//         userName: true,
-//         password: true,
-//         id: true,
-//         accountId: true,
-//         account: {
-//           select: {
-//             balance: true,
-//           },
-//         },
-//       },
-//     });
-
-//     if (!User) {
-//       return res.status(401).json({ message: "Incorrect username or password" });
-//     }
-
-//     const isPasswordCorrect = await bcrypt.compare(pwd, User.password);
-
-//     if (!isPasswordCorrect) {
-//       return res.status(401).json({ message: "Incorrect username or password" });
-//     }
-
-//     const payload = {
-//       id: User.id,
-//       userName: User.userName,
-//       accountId: User.accountId,
-//     };
-//     const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "15min" });
-
-//     const result = {
-//       ...payload,
-//       balance: User.account.balance,
-//       token
-//     };
-
-//     // res.cookie("token", token, {
-//     //   httpOnly: true,
-//     //   secure: false,
-//     //   sameSite: "none",
-//     //   maxAge: 900000,
-//     // });
-
-
-//     res.status(200).json({ message: "Login successful", ...result, token });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
 
 router.post("/login", async (req: Request, res: Response) => {
   try {
