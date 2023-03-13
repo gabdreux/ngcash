@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
       setIsAuthenticated(false);
       sessionStorage.removeItem("token");
       sessionStorage.clear();
-      router.push("/");
+      // router.push("/");
     };
 
   // Componente AuthProvider é renderizado com o valor do objeto do contexto

@@ -94,7 +94,8 @@ const Menu: React.FC = () => {
 
       <div className="menu__buttons-container">
         {isAuthenticated ? (
-            <button onClick={handleLogout}>Logout</button>
+            // <button onClick={handleLogout}>Logout</button>
+            <ActiveLink href={"/"} onClick={handleLogout}>Logout</ActiveLink>
           ) : (
             <>
               <ActiveLink href={"/login"}>Login</ActiveLink>

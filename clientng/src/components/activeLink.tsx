@@ -3,10 +3,11 @@ import { usePathname } from 'next/navigation';
 
 export type ActiveLinkProps = {
     children: React.ReactNode;
+    onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 } & LinkProps;
 
 
-const ActiveLink = ({ href, children, ...rest }: ActiveLinkProps) => {
+const ActiveLink = ({ href, children, onClick, ...rest }: ActiveLinkProps) => {
 
 
     const pathname = usePathname();
@@ -16,7 +17,7 @@ const ActiveLink = ({ href, children, ...rest }: ActiveLinkProps) => {
     return (
         
         <Link legacyBehavior {...rest} href={href}>
-            <a className="activeLink">
+            <a className="activeLink" onClick={onClick}>
                 {children}
             </a>
         </Link>        
