@@ -64,13 +64,6 @@ const LoginLayout = () => {
   };
 
 
-  // const handleLogout = () => {
-  //   sessionStorage.removeItem('token');
-  //   setToken(null);
-  //   setSuccess(false);
-  //   setIsAuthenticated(false);
-  // };
-
   const headers = { Authorization: `Bearer ${token}` };
 
 return (

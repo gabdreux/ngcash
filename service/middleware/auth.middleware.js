@@ -88,7 +88,8 @@ exports.verifyToken = (req, res, next) => {
 
     // verifica se o token é nulo
     if (!token) {
-        return res.sendStatus(401).console.log('Token inválido.');
+        return res.sendStatus(401)
+        console.log('Token inválido.');
     }
 
     // verifica se o token é válido
@@ -117,7 +118,8 @@ exports.verifyRefreshToken = (req, res, next) => {
 
     // verifica se o token de atualização é nulo
     if (!refreshToken) {
-        return res.sendStatus(401).console.log('Token de atualização inválido.');
+        return res.sendStatus(401)
+        console.log('Token de atualização inválido.');
     }
 
     // verifica se o token de atualização é válido
