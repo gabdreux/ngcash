@@ -2,7 +2,7 @@ import { AppProps } from 'next/app';
 import BgLayout from '../../src/components/bgLayout';
 import 'src/styles/styles.css';
 import Menu from '@/components/menu';
-import { AuthProvider } from '../context/AuthProvider';
+import  { AuthProvider }  from '../context/AuthProvider';
 import PersistLogin from '../components/PersistLogin';
 import { useEffect } from 'react';
 

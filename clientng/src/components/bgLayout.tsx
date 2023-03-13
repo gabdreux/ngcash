@@ -4,18 +4,18 @@ import useAuth from '../hooks/useAuth';
 import { fetchAuthData } from '../api/auth';
 import AuthContext from "../context/AuthProvider";
 
-const BgLayout = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-  const isLoginPage = router.pathname === '/login';
-  const isRegisterPage = router.pathname === '/register';
 
+const BgLayout = ({ children }: { children: React.ReactNode }) => {
+  
+  const router = useRouter();
   const { auth, setAuth } = useContext(AuthContext);
-  const [loading, setLoading] = useState(true);
+  const { isAuthenticated } = useContext(AuthContext);
+  console.log("autenticado? bg", isAuthenticated); 
+
 
   useEffect(() => {
     async function loadAuthData() {
       await fetchAuthData();
-      setLoading(false);
     }
     loadAuthData();
   }, [setAuth]);
@@ -24,6 +24,8 @@ const BgLayout = ({ children }: { children: React.ReactNode }) => {
   const balance = auth?.account?.balance || '';
 
   return (
+
+    
     <div className="bgBox">
       <div>
         <img
@@ -34,17 +36,19 @@ const BgLayout = ({ children }: { children: React.ReactNode }) => {
         />
       </div>
 
-      <div className={isLoginPage || isRegisterPage ? 'hide' : 'greetings'}>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            <h1>OLÁ, {userName}!</h1>
-            <h2>Seu saldo atual é de: {balance}.</h2>
-          </>
-        )}
-      </div>
 
+    <div className="greetings">
+      {isAuthenticated ? (
+        <>
+          <h1>Bem-vindo, {userName}!</h1>
+          <h2>Seu saldo atual é de: {balance}.</h2>
+        </>
+      ) : (
+        <>
+          <h1>BEM-VINDO!</h1>
+        </>
+      )}
+    </div>
       {children}
     </div>
   );

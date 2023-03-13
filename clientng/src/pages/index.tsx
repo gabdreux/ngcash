@@ -6,7 +6,7 @@ import DataTable from "@/components/extrato";
 function Index () {
 
   const { isAuthenticated } = useContext(AuthContext);
-  console.log("autenticado?", isAuthenticated); 
+  console.log("autenticado? index", isAuthenticated); 
 
   return (
     <>

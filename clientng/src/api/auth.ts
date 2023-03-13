@@ -5,7 +5,7 @@ import axios from '../api/axios';
 interface AuthResponse {
   userName: string;
   account: {
-    balance: string;
+    balance: number;
   };
 }
 
@@ -18,3 +18,5 @@ export async function fetchAuthData() {
     return null;
   }
 };
+
+
