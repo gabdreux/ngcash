@@ -15,7 +15,7 @@ const BgLayout = ({ children }: { children: React.ReactNode }) => {
     // const accountData = userData?.account || {};
     console.log(userData);
     setUserName(userData?.userName || '');
-    setBalance(userData?.balance || '');
+    setBalance(auth.balance || userData?.balance);
   }, [auth]);
 
   return (
