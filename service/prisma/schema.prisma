@@ -56,13 +56,34 @@ model Transaction {
 
 
   sourceId      Int
-  source        Account   @relation("saidas", fields: [sourceId], references: [id])
+  source        Account   @relation("entradas", fields: [sourceId], references: [id])
 
 
   destinationId Int
-  destination   Account   @relation("entradas", fields: [destinationId], references: [id])
+  destination   Account   @relation("saidas", fields: [destinationId], references: [id])
  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 model ActiveSections {

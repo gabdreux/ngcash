@@ -193,6 +193,8 @@ router.post("/login", async (req: Request, res: Response) => {
 
 
 
+
+
 // importa o pacote jsonwebtoken
 const jwt = require('jsonwebtoken');
 
@@ -201,8 +203,8 @@ const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
 
 // importa os middlewares de autenticação
 const { verifyToken, verifyRefreshToken } = require('../../middleware/auth.middleware');
-
-
+// const session = require('express-session');
+import session from 'express-session';
 
 
 // define uma rota para testar a autenticação
@@ -210,10 +212,6 @@ router.get('/authTest', verifyToken, (req, res) => {
   return res.status(200).json({ teste: true });
 });
 
-
-
-// const session = require('express-session');
-import session from 'express-session';
 
 // define uma rota para autenticar o usuário
 router.post('/auth', (req, res) => {
@@ -251,65 +249,60 @@ router.post('/refresh', verifyRefreshToken, (req, res) => {
 
 
 
+interface TransferRequest {
+  sourceId: number;
+  destinationId: number;
+  value: number;
+}
+
+interface ErrorResponse {
+  message: string;
+}
 
 
+router.post('/transfer', async (req: Request<{}, {}, TransferRequest>, res: Response<ErrorResponse>) => {
+  const { sourceId, destinationId, value } = req.body;
 
+  // Verifica se as contas existem
+  const sourceAccount = await prisma.account.findUnique({ where: { id: sourceId } });
+  const destinationAccount = await prisma.account.findUnique({ where: { id: destinationId } });
 
+  if (!sourceAccount || !destinationAccount) {
+    return res.status(404).json({ message: 'Conta não encontrada' });
+  }
 
+  // Verifica se há saldo suficiente na conta de origem
+  if (sourceAccount.balance < value) {
+    return res.status(400).json({ message: 'Saldo insuficiente' });
+  }
 
+  try {
+    // Realiza a transferência
+    await prisma.transaction.create({
+      data: {
+        value,
+        source: { connect: { id: sourceId } },
+        destination: { connect: { id: destinationId } },
+      },
+    });
 
+    // Atualiza os saldos das contas
+    await prisma.account.update({
+      where: { id: sourceId },
+      data: { balance: { decrement: value } },
+    });
+    await prisma.account.update({
+      where: { id: destinationId },
+      data: { balance: { increment: value } },
+    });
 
+    res.status(200).json({ message: 'Transferência realizada com sucesso' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erro ao realizar transferência' });
+  }
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////////////////////////
-
-// Update
-
-// router.put("/user", async (req, res) => {
-
-//     const {id, userName, status} = req.body;
-
-//     if(!id){
-//         return res.status(400).json("Id is not valid!")
-//     };
-
-//     const userAlreadyExist = await prisma.user.findUnique({
-//         where: {
-//             id,
-//         }
-//     });
-
-//     if(!userAlreadyExist){
-//         return res.status(404).json("Esse usuário já existe!")
-//     }
-
-//     const user = await prisma.user.update ({
-
-//         where: {
-//             id,
-//         },
-//         data: {
-//             userName,
-//             status: true,
-//         },
-//     });
-
-//     return res.status(200).json(user);
-
-// });
 
 
 module.exports = router;
