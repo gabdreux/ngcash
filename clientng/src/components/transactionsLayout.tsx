@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import axios from '../api/axios';
 import AuthContext from "../context/AuthProvider";
+import ActiveLink from "./activeLink";
 
 
 export default function TransactionsLayout() {
@@ -60,38 +61,30 @@ export default function TransactionsLayout() {
 
 
   return (
-    <div>
       <div>
-        <div>
-          <h3>TRANSAÇÃO</h3>
-        </div>
-
+        <h1>TRANSACTION</h1>
         <form onSubmit={handleSubmit}>
-          <div>
-            <p>Valor:</p>
-          </div>
-
-          <div>
-            <input type="number" value={value} onChange={handleValueChange} title="Value:" />
-          </div>
-
-          <div>
-            <p>Conta para depósito:</p>
-          </div>
-
-          <div>
-            <input type="number" value={creditedAccountID} onChange={handleCreditedAccountIDChange} title="creditedAccountID:" />
-          </div>
-
-          {errorMessage && <div>{errorMessage}</div>}
-
-          <div>
-            <button type="submit">Confirmar</button>
-            <button type="button">Cancelar</button>
-          </div>
+          <label htmlFor='value'>Value:</label>
+          <input 
+            type="number"
+            id='value'
+            onChange={handleValueChange}
+            value={value}
+            required
+          />
+          <label htmlFor='creditedAccountID'>Credited Account ID:</label>
+          <input 
+            type="number"
+            id='creditedAccountID'
+            onChange={handleCreditedAccountIDChange}
+            value={creditedAccountID}
+            required
+          />
+          {errorMessage && <p className='errmsg' aria-live="assertive">{errorMessage}</p>}
+          <button className='sign' type="submit">Confirm</button>
         </form>
       </div>
-    </div>
+
   );
 };
 

@@ -31,7 +31,7 @@ const BgLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="greetings">
         {isAuthenticated ? (
           <>
-            <h1>Bem-vindo, {userName}!</h1>
+            <h1>Olá, {userName}!</h1>
             <h2>Seu saldo atual é de R${balance}.</h2>
           </>
         ) : (
