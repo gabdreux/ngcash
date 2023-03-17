@@ -144,6 +144,7 @@ router.post("/login", async (req: Request, res: Response) => {
       },
     });
 
+    
     // Retorna erro se o usuário não for encontrado
     if (!User) {
       return res.status(401).json({ message: "Incorrect username or password" });
@@ -217,8 +218,8 @@ router.get('/authTest', verifyToken, (req, res) => {
 router.post('/auth', (req, res) => {
   const { userName, password } = req.body;
 
-  // cria um token de atualização com o nome do usuário e a senha
-  const refreshToken = jwt.sign({ userName, password }, JWT_REFRESH_SECRET, { expiresIn: '1800s' });
+  // cria um token de atualização com o nome do usuário e a senha (fica de base para conferir depois com o token criado a seguir ou com o token criado na rota refreshToken)
+  const refreshToken = jwt.sign({ userName, password }, JWT_REFRESH_SECRET, { expiresIn: '900s' });
 
   // cria um token de acesso com o token de atualização
   const token = jwt.sign({ refreshToken }, JWT_SECRET, { expiresIn: '20s' });
@@ -302,6 +303,53 @@ router.post('/transfer', async (req: Request<{}, {}, TransferRequest>, res: Resp
     res.status(500).json({ message: 'Erro ao realizar transferência' });
   }
 });
+
+
+
+// router.get('/transactions', async (req: Request, res: Response) => {
+//   const { accountId } = req.body;
+
+//   try {
+//     const transactions = await prisma.transaction.findMany({
+//       where: {
+//         sourceId: accountId,
+//       },
+//     });
+//     res.status(200).json(transactions);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Erro ao buscar transações' });
+//   }
+// });
+
+
+
+router.get('/transactions', async (req: Request, res: Response) => {
+  const { accountId } = req.query;
+  const numAccountId = Number(accountId);
+  console.log("accountId no server:", accountId);
+
+  try {
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        OR: [
+          {
+            sourceId: numAccountId,
+          },
+          {
+            destinationId: numAccountId,
+          },
+        ],
+      },
+    });
+    console.log('Transactions:', transactions)
+    res.status(200).json(transactions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erro ao buscar transações' });
+  }
+});
+
 
 
 

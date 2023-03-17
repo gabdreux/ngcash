@@ -37,13 +37,10 @@ const LoginLayout = () => {
     }
   }, []);
 
+  
   const handleSubmit = async (e:any) => {
     e.preventDefault();
   
-    const userObj = {
-      userName: user,
-      // userPwd: pwd,
-    };
 
     try {
       const response = await axios.post('/api/login', { user, pwd }, { withCredentials: true });
@@ -51,7 +48,6 @@ const LoginLayout = () => {
 
       setSuccess(true);        
       setIsAuthenticated(true);
-      sessionStorage.setItem("user", JSON.stringify(userObj));
 
       // Obter o token da resposta da API
       const token = data.token;

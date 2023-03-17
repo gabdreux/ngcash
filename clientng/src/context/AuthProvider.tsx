@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
       try {
         const decodedToken: any = jwt_decode(token);
         const { id, userName, accountId, balance } = decodedToken;
-        setAuth({ id, user: userName, accountId, balance });
+        setAuth({ id, user: userName, accountId, balance, token });
         setIsAuthenticated(true); // Corrigido para true        
       } catch (error) {
         console.error(error);

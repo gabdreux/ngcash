@@ -9,6 +9,7 @@ const BgLayout = ({ children }: { children: React.ReactNode }) => {
 
   const [userName, setUserName] = useState('');
   const [balance, setBalance] = useState('');
+  const [accountId, setAccountId] = useState('');
 
   useEffect(() => {
     const userData = JSON.parse(sessionStorage.getItem('user') || '{}');
@@ -16,6 +17,7 @@ const BgLayout = ({ children }: { children: React.ReactNode }) => {
     console.log(userData);
     setUserName(userData?.userName || '');
     setBalance(auth.balance || userData?.balance);
+    setAccountId(userData?.accountId || '');
   }, [auth]);
 
   return (
@@ -32,7 +34,8 @@ const BgLayout = ({ children }: { children: React.ReactNode }) => {
         {isAuthenticated ? (
           <>
             <h1>Olá, {userName}!</h1>
-            <h2>Seu saldo atual é de R${balance}.</h2>
+            <h2>Seu saldo atual é de R${balance}</h2>
+            <h2>Conta corrente: {accountId}</h2>
           </>
         ) : (
           <>
